@@ -16,6 +16,9 @@ namespace Supplier_MVC.Controllers
         [HttpPost("/login")]
         public async Task<IActionResult> LoginAttempt(string username, string password)
         {
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+                return Content("Account not found.");
+
             var accounts = Database.LocalDatabase.SelectSuppliersMetadata();
             var account = accounts.Where(x => x.Name.ToLower() == username.ToLower() && x.Password == password);
 

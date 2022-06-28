@@ -35,7 +35,7 @@
                             <td>@i.GetValue(j, null)</td>
                         }
                         <td>
-                            <button onclick="AddName('@j.Name', '@j.ProductId')" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
+                            <button onclick="AddName('@j.Name', '@j.ProductId', '@j.Description', '@j.Unit')" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
                         </td>
                         <td>
                             <button onclick="Delete('@j.Name', '@j.ProductId')" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
@@ -48,20 +48,28 @@
     </div>
 
     <script>
-        function AddName(username, id) {
+        function AddName(username, id, desc, unit) {
             document.getElementById("name").value = username;
+            document.getElementById("description").value = desc;
+            document.getElementById("unit").value = unit;
             document.getElementById("productId").value = id;
         }
         function Delete(username, id) {
             document.getElementById("productId_2").value = id;
         }
+        let loaded = 0;
+        function dummyLoaded() {
+            if (loaded >= 1)
+                location.reload();
+            loaded++;
+        }
     </script>
-    <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
+    <iframe onLoad="dummyLoaded()" name="dummyframe" id="dummyframe" style="display: none;"></iframe>
     <!-- Modal -->
     <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="label" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form onsubmit="location.reload();" target="dummyframe" action="./add" method="post">
+                <form target="dummyframe" action="./add" method="post">
                     <div class="modal-header">
                         <h5 class="modal-title" id="label">Edit Item</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -91,7 +99,7 @@
     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="label" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form onsubmit="location.reload();" target="dummyframe" action="./remove" method="post">
+                <form target="dummyframe" action="./remove" method="post">
                     <div class="modal-header">
                         <h5 class="modal-title" id="label">Remove Item...?</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
