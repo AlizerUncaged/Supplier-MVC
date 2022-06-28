@@ -30,5 +30,16 @@ namespace Supplier_MVC.Controllers
 
             return Content("ok");
         }
+
+        [HttpPost("/remove")]
+        public IActionResult Index(string id)
+        {
+            Database.LocalDatabase.RemoveProduct(new Models.Product
+            {
+                ProductId = long.Parse(id),
+            });
+
+            return Content("ok");
+        }
     }
 }

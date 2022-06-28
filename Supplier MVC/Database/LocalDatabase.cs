@@ -68,6 +68,21 @@ namespace Supplier_MVC.Database
              CreateTableIfNotExist(SuppliersExtensionTable,
                  "CompanyName TEXT, Password TEXT");
 
+        public static bool RemoveProduct(Models.Product prod)
+        {
+            var cmd = new SQLiteCommand(Connection);
+            cmd.CommandText = $"DELETE FROM {ProductsTable} " +
+                $" WHERE ProductID=@e";
+
+            cmd.Parameters.AddWithValue("e", prod.ProductId);
+
+            cmd.Prepare();
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+
+            return true;
+        }
+
         public static bool InsertProduct(Models.Product prod)
         {
             if (prod.ProductId > 0)
@@ -89,7 +104,7 @@ namespace Supplier_MVC.Database
             else
             {
                 var cmd = new SQLiteCommand(Connection);
-                cmd.CommandText = $"INSERT longO {ProductsTable}" +
+                cmd.CommandText = $"INSERT into {ProductsTable}" +
                     $"(Name, Description, Qty, Unit, DateAdded, DateModified) " +
                     $"VALUES(@a, @b, @c, @d, @e, @f)";
 
@@ -213,7 +228,7 @@ namespace Supplier_MVC.Database
             try
             {
                 var cmd = new SQLiteCommand(Connection);
-                cmd.CommandText = $"INSERT longO {SuppliersTable}" +
+                cmd.CommandText = $"INSERT into {SuppliersTable}" +
                     $"(CompanyName, Address, Representative, ContactNo, DateAdded, DateModified) " +
                     $"VALUES(@a, @b, @c, @d, @e, @f)";
 

@@ -37,6 +37,9 @@
                         <td>
                             <button onclick="AddName('@j.Name', '@j.ProductId')" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
                         </td>
+                        <td>
+                            <button onclick="Delete('@j.Name', '@j.ProductId')" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+                        </td>
                     </tr>
                 }
             }
@@ -49,13 +52,16 @@
             document.getElementById("name").value = username;
             document.getElementById("productId").value = id;
         }
+        function Delete(username, id) {
+            document.getElementById("productId_2").value = id;
+        }
     </script>
-
+    <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
     <!-- Modal -->
     <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="label" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="./add" method="post">
+                <form onsubmit="location.reload();" target="dummyframe" action="./add" method="post">
                     <div class="modal-header">
                         <h5 class="modal-title" id="label">Edit Item</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -82,5 +88,24 @@
         </div>
     </div>
 
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form onsubmit="location.reload();" target="dummyframe" action="./remove" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="label">Remove Item...?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input value="-1" id="productId_2" type="hidden" name="id" class="form-control">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
