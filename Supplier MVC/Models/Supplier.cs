@@ -1,4 +1,6 @@
-﻿namespace Supplier_MVC.Models
+﻿using System;
+
+namespace Supplier_MVC.Models
 {
     public class Supplier
     {

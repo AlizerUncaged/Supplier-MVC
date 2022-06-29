@@ -1,25 +1,26 @@
-await Supplier_MVC.Database.LocalDatabase.ConnectAsync();
-Supplier_MVC.Database.LocalDatabase.InitializeTables();
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
+using System.Threading.Tasks;
 
-var builder = WebApplication.CreateBuilder(args);
+namespace Supplier_MVC
+{
+    public class Program
+    {
+        public async Task StartAsync(string[] args)
+        {
+            await Supplier_MVC.Database.LocalDatabase.ConnectAsync();
+            Supplier_MVC.Database.LocalDatabase.InitializeTables();
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+            CreateHostBuilder(args).Build().Run();
+        }
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-    app.UseExceptionHandler("/Home/Error");
-
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseAuthorization();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.Run();
+        public IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
+        public static void Main(string[] args) => new Program().StartAsync(args).GetAwaiter().GetResult();
+    }
+}
