@@ -247,7 +247,7 @@ namespace Supplier_MVC.Database
                 cmd.Dispose();
 
                 cmd = new SQLiteCommand(Connection);
-                cmd.CommandText = $"INSERT longO {SuppliersExtensionTable}" +
+                cmd.CommandText = $"INSERT into {SuppliersExtensionTable}" +
                     $"(CompanyName, Password) " +
                     $"VALUES(@a, @b)";
 

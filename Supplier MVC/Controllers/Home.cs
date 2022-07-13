@@ -7,7 +7,8 @@ namespace Supplier_MVC.Controllers
         [HttpGet("/")]
         public IActionResult Root()
         {
-            return View();
+            Response.Redirect("./login");
+            return Content(string.Empty);
         }
 
         [HttpGet("/home")]

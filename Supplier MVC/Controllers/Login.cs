@@ -24,7 +24,7 @@ namespace Supplier_MVC.Controllers
                 return Content("Account not found.");
 
             var accounts = Database.LocalDatabase.SelectSuppliersMetadata();
-            var account = accounts.Where(x => x.Name.ToLower() == username.ToLower() && x.Password == password);
+            var account = accounts.Where(x => x is { } && x.Name is { } && x.Password is { } && x.Name.ToLower() == username.ToLower() && x.Password == password);
 
             if (!account.Any())
                 return Content("Account not found.");
