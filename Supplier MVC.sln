@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Supplier MVC", "Supplier MVC\Supplier MVC.csproj", "{B8A9B6DF-5765-43D6-AA3F-A3BAB6728BAB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cinco- Entprog- fotis1b", "Supplier MVC\Cinco- Entprog- fotis1b.csproj", "{B8A9B6DF-5765-43D6-AA3F-A3BAB6728BAB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
