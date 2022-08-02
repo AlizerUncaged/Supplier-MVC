@@ -6,7 +6,6 @@ using Microsoft.Extensions.Hosting;
 
 namespace Supplier_MVC
 {
-
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -33,7 +32,10 @@ namespace Supplier_MVC
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
             app.UseStaticFiles();
+
+            app.UseAuthentication();
 
             app.UseRouting();
 

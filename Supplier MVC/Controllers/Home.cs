@@ -1,9 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Supplier_MVC.Context;
+using Supplier_MVC.Models;
 
 namespace Supplier_MVC.Controllers
 {
     public class Home : Controller
     {
+        private readonly DatabaseContext _databaseContext;
+
+        public Home(DatabaseContext databaseContext)
+        {
+            _databaseContext = databaseContext;
+            _databaseContext.Database.EnsureCreated();
+        }
+
         [HttpGet("/")]
         public IActionResult Root()
         {
@@ -14,20 +26,39 @@ namespace Supplier_MVC.Controllers
         [HttpGet("/home")]
         public IActionResult Index()
         {
-            ViewData["Products"] = Database.LocalDatabase.SelectProducts();
+            ViewData["Products"] = _databaseContext.Products.ToList();
             return View();
         }
 
         [HttpPost("/add")]
-        public IActionResult Index(string name, string description, string unit, string id)
+        public async Task<IActionResult> Index(string name, string description, string unit, string id)
         {
-            Database.LocalDatabase.InsertProduct(new Models.Product
+            var intId = int.Parse(id);
+
+            if (intId > 0)
             {
-                ProductId = long.Parse(id),
-                Name = name,
-                Description = description,
-                Unit = unit
-            });
+                // Edit item.
+                var found = _databaseContext.Products.FirstOrDefault(x => x.ProductId == intId);
+                if (found is { })
+                {
+                    found.Name = name;
+                    found.Description = description;
+                    found.Unit = unit;
+                }
+            }
+            else
+            {
+                // Add item.
+                _databaseContext.Products.Add(new ProductsModel()
+                {
+                    ProductId = _databaseContext.Products.Count() + 1,
+                    Name = name,
+                    Description = description,
+                    Unit = unit
+                });
+            }
+
+            await _databaseContext.SaveChangesAsync();
 
             return Content("ok");
         }
@@ -35,11 +66,12 @@ namespace Supplier_MVC.Controllers
         [HttpPost("/remove")]
         public IActionResult Index(string id)
         {
-            Database.LocalDatabase.RemoveProduct(new Models.Product
-            {
-                ProductId = long.Parse(id),
-            });
-
+            var found =
+                _databaseContext.Products.FirstOrDefault(x => x.ProductId == int.Parse(id));
+            
+            if (found is { })
+                _databaseContext.Products.Remove(found);
+            
             return Content("ok");
         }
     }

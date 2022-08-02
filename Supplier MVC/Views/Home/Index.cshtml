@@ -1,27 +1,34 @@
-﻿
+﻿@using System.Collections.ObjectModel
+@using System.Collections
+
+@{
+    var products = ViewData["Products"] as
+        List<ProductsModel>;
+}
 <div class="container mt-4">
     <h2>Edit Products</h2>
     <table class="data-table table" id="oootable">
         <thead>
-            <tr class="data-heading">
-                @{
-                    //  ViewData["Products"]
-                    foreach (var prop in typeof(Supplier_MVC.Models.Product).GetProperties())
-                    {
-                        <th>@string.Concat(prop.Name.Select(x => Char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' ')</th>
-                    }
+        <tr class="data-heading">
+            @{
+                //  ViewData["Products"]
+                foreach (var prop in typeof(Supplier_MVC.Models.ProductsModel).GetProperties())
+                {
+                    <th>@string.Concat(prop.Name.Select(x => Char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' ')</th>
                 }
+            }
 
-                <td>Actions</td>
-                <td></td>
+            <td>Actions</td>
+            <td></td>
 
-            </tr>
+        </tr>
 
         </thead>
         <tbody>
-            @{
-                var properties = typeof(Supplier_MVC.Models.Product).GetProperties();
-                foreach (var j in (ViewData["Products"] as IEnumerable<Supplier_MVC.Models.Product>))
+        @{
+            var properties = typeof(Supplier_MVC.Models.ProductsModel).GetProperties();
+            if (products is { Count: > 0})
+                foreach (var j in products)
                 {
                     <tr>
                         @foreach (var i in properties)
@@ -36,10 +43,10 @@
                         </td>
                     </tr>
                 }
-            }
+        }
         </tbody>
     </table>
-    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal"><i class="fa fa-plus" aria-hidden="true"></i> Add Product</button>
+    <button onclick="AddName(null, -1, null, null)" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal"><i class="fa fa-plus" aria-hidden="true"></i> Add Product</button>
 </div>
 
 <script>
@@ -66,7 +73,7 @@
         <div class="modal-content">
             <form target="dummyframe" action="./add" method="post">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="label">Edit Item</h5>
+                    <h5 class="modal-title" id="label">Add / Edit Item</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
