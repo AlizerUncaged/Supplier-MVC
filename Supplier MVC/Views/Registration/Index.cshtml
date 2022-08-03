@@ -1,6 +1,13 @@
 ﻿
 
 <div class="container mt-4">
+    
+    @if (ViewData.ContainsKey("IsError"))
+    {
+        <div class="alert alert-danger" role="alert">
+            @ViewData["IsError"]
+        </div>
+    }
 
     <form action="registration" method="post">
         <h2>Supplier Registration</h2>

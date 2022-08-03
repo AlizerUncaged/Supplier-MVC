@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
@@ -6,38 +8,45 @@ using System.Threading.Tasks;
 
 namespace Supplier_MVC.Controllers
 {
+    [AllowAnonymous]
     public class Login : Controller
     {
+        private readonly Microsoft.AspNetCore.Identity.SignInManager<Models.SupplierUser> signInManager;
+
+        public Login(SignInManager<Models.SupplierUser> signInManager)
+        {
+            this.signInManager = signInManager;
+        }
+
         [HttpGet("/login")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(bool error = false, string ReturnUrl = null)
         {
             if (Request.Query.ContainsKey("RegisterSuccess"))
                 ViewData["RegisterSuccess"] = 1;
 
+            if (error)
+                ViewData["IsError"] = "Invalid login.";
+
+            if (!string.IsNullOrWhiteSpace(ReturnUrl))
+                ViewData["IsError"] = "You need to be logged in first.";
+
             return View();
         }
-        //
-        // [HttpPost("/login")]
-        // public async Task<IActionResult> LoginAttempt(string username, string password)
-        // {
-        //     if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
-        //         return Content("Account not found.");
-        //
-        //     var accounts = Database.LocalDatabase.SelectSuppliersMetadata();
-        //     var account = accounts.Where(x => x is { } && x.Name is { } && x.Password is { } && x.Name.ToLower() == username.ToLower() && x.Password == password);
-        //
-        //     if (!account.Any())
-        //         return Content("Account not found.");
-        //
-        //     var acc = account.First();
-        //
-        //     CookieOptions option = new CookieOptions();
-        //     option.Expires = DateTime.Now.AddDays(30);
-        //
-        //     Response.Cookies.Append("username", acc.Name, option);
-        //     Response.Cookies.Append("password", acc.Password, option);
-        //
-        //     return RedirectPermanent("./home");
-        // }
+
+        [HttpPost("/login")]
+        public async Task<IActionResult> LoginAttempt(string username, string password)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await signInManager.PasswordSignInAsync(username, password, true, true);
+
+                if (result.Succeeded)
+                    return RedirectPermanent("./home");
+            }
+
+            //IsError
+
+            return RedirectPermanent("./login?error=true");
+        }
     }
 }

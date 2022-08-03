@@ -14,7 +14,8 @@ namespace Supplier_MVC.Models
 
         public int SupplierId { get; set; }
 
-        [MaxLength(50)] public string Status { get; set; }
+        [MaxLength(50)]
+        public string Status { get; set; }
 
         public DateTime DateAdded { get; set; }
 

@@ -6,47 +6,48 @@
         List<ProductsModel>;
 }
 <div class="container mt-4">
-    <h2>Edit Products</h2>
+    <div class="d-flex justify-content-between align-items-center">
+        <h2 class="">Edit Products</h2>
+        <a class="btn btn-danger" href="./logout"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a>
+    </div>
     <table class="data-table table" id="oootable">
         <thead>
-        <tr class="data-heading">
-            @{
-                //  ViewData["Products"]
-                foreach (var prop in typeof(Supplier_MVC.Models.ProductsModel).GetProperties())
-                {
-                    <th>@string.Concat(prop.Name.Select(x => Char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' ')</th>
+            <tr class="data-heading">
+                @{
+                    //  ViewData["Products"]
+                    foreach (var prop in typeof(Supplier_MVC.Models.ProductsModel).GetProperties())
+                    {
+                        <th>@string.Concat(prop.Name.Select(x => Char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' ')</th>
+                    }
                 }
-            }
-
-            <td>Actions</td>
-            <td></td>
-
-        </tr>
-
+                <td>Actions</td>
+                <td></td>
+            </tr>
         </thead>
         <tbody>
-        @{
-            var properties = typeof(Supplier_MVC.Models.ProductsModel).GetProperties();
-            if (products is { Count: > 0})
-                foreach (var j in products)
-                {
-                    <tr>
-                        @foreach (var i in properties)
-                        {
-                            <td>@i.GetValue(j, null)</td>
-                        }
-                        <td>
-                            <button onclick="AddName('@j.Name', '@j.ProductId', '@j.Description', '@j.Unit')" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
-                        </td>
-                        <td>
-                            <button onclick="Delete('@j.Name', '@j.ProductId')" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
-                        </td>
-                    </tr>
-                }
-        }
+            @{
+                var properties = typeof(Supplier_MVC.Models.ProductsModel).GetProperties();
+                if (products is { Count: > 0 })
+                    foreach (var j in products)
+                    {
+                        <tr>
+                            @foreach (var i in properties)
+                            {
+                                <td>@i.GetValue(j, null)</td>
+                            }
+                            <td>
+                                <button onclick="AddName('@j.Name', '@j.ProductId', '@j.Description', '@j.Unit')" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
+                            </td>
+                            <td>
+                                <button onclick="Delete('@j.Name', '@j.ProductId')" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
+                            </td>
+                        </tr>
+                    }
+            }
         </tbody>
     </table>
-    <button onclick="AddName(null, -1, null, null)" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal"><i class="fa fa-plus" aria-hidden="true"></i> Add Product</button>
+    <button onclick="AddName(null, -1, null, null)" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal">
+        <i class="fa fa-plus" aria-hidden="true"></i> Add Product</button>
 </div>
 
 <script>
@@ -78,7 +79,7 @@
                 </div>
                 <div class="modal-body">
                     @{
-                        foreach (var j in properties.Where(x => !x.Name.ToLower().Contains("date") && !x.Name.ToLower().Contains("id") && !x.Name.ToLower().Contains("quantity")))
+                        foreach (var j in properties.Where(x => !x.Name.ToLower().Contains("date") && !x.Name.ToLower().Contains("id") && !x.Name.ToLower().Contains("qty")))
                         {
                             var lowered = j.Name.ToLower();
                             <div class="mb-3">

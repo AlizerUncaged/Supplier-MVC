@@ -21,37 +21,11 @@ namespace Supplier_MVC
 
         public IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureServices(servers => servers.AddEntityFrameworkSqlite()
-                    .AddDbContext<Context.DatabaseContext>().Configure<IdentityOptions>(options =>
-                    {
-                        // Password settings.
-                        options.Password.RequireDigit = false;
-                        options.Password.RequireLowercase = false;
-                        options.Password.RequireNonAlphanumeric = false;
-                        options.Password.RequireUppercase = true;
-                        options.Password.RequiredLength = 4;
-                        options.Password.RequiredUniqueChars = 1;
+                .ConfigureServices(services => services.AddEntityFrameworkSqlite())
+                .ConfigureServices(services =>
+                {
 
-                        // Lockout settings.
-                        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                        options.Lockout.MaxFailedAccessAttempts = 5;
-                        options.Lockout.AllowedForNewUsers = true;
-
-                        // User settings.
-                        options.User.AllowedUserNameCharacters =
-                            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-                        options.User.RequireUniqueEmail = false;
-                    }).ConfigureApplicationCookie(options =>
-                    {
-                        // Cookie settings
-                        options.Cookie.HttpOnly = true;
-                        options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-
-                        options.LoginPath = "/login";
-                        options.AccessDeniedPath = "/accessdenied";
-                        options.SlidingExpiration = true;
-                    }).AddIdentity<IdentityUser, IdentityRole>(options => { })
-                    .AddEntityFrameworkStores<DatabaseContext>())
+                })
                 .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
 
         public static void Main(string[] args) => new Program().StartAsync(args).GetAwaiter().GetResult();
