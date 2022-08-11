@@ -18,6 +18,12 @@ namespace Supplier_MVC.Controllers
             this.signInManager = signInManager;
         }
 
+        [HttpGet("/debug")]
+        public async Task<IActionResult> asdasdas()
+        {
+            return Content("hi");
+        }
+
         [HttpGet("/login")]
         public async Task<IActionResult> Index(bool error = false, string ReturnUrl = null)
         {
@@ -41,7 +47,7 @@ namespace Supplier_MVC.Controllers
                 var result = await signInManager.PasswordSignInAsync(username, password, true, true);
 
                 if (result.Succeeded)
-                    return RedirectPermanent("./home");
+                    return RedirectPermanent("./dashboard");
             }
 
             //IsError

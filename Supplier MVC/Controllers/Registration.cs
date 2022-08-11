@@ -40,6 +40,7 @@ namespace Supplier_MVC.Controllers
             {
                 UserName = name,
                 PasswordHash = password,
+                SupplierName = name
             }, password);
 
             if (!registerResult.Succeeded) return RedirectPermanent($"./registration?error=Register failed. {string.Join(", ", registerResult.Errors.Select(x => x.Description))}");
@@ -53,6 +54,7 @@ namespace Supplier_MVC.Controllers
                 DateModified = System.DateTime.Now,
                 Representative = representative,
                 SupplierId = databaseContext.Suppliers.Count()
+                
             });
 
             await databaseContext.SaveChangesAsync();

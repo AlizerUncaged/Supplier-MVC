@@ -20,5 +20,7 @@ namespace Supplier_MVC.Models
         public DateTime DateAdded { get; set; }
 
         public DateTime DateReceived { get; set; }
+        
+        
     }
 }

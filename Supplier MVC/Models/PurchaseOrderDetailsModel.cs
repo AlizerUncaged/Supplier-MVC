@@ -10,7 +10,10 @@ namespace Supplier_MVC.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         
+        [TableHidden]
         public int PurchaseOrderHeaderId { get; set; }
+        
+        [TableHidden]
         public int ProductId { get; set; }
         public int Qty { get; set; }
         public double Price { get; set; }

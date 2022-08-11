@@ -22,10 +22,6 @@ namespace Supplier_MVC
         public IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices(services => services.AddEntityFrameworkSqlite())
-                .ConfigureServices(services =>
-                {
-
-                })
                 .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
 
         public static void Main(string[] args) => new Program().StartAsync(args).GetAwaiter().GetResult();

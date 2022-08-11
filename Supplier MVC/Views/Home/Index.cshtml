@@ -5,45 +5,46 @@
     var products = ViewData["Products"] as
         List<ProductsModel>;
 }
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css"/>
 <div class="container mt-4">
+    <partial name="_AuthLayout"/>
     <div class="d-flex justify-content-between align-items-center">
-        <h2 class="">Edit Products</h2>
-        <a class="btn btn-danger" href="./logout"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a>
+        <h3 class="">Edit Products</h3>
     </div>
     <table class="data-table table" id="oootable">
         <thead>
-            <tr class="data-heading">
-                @{
-                    //  ViewData["Products"]
-                    foreach (var prop in typeof(Supplier_MVC.Models.ProductsModel).GetProperties())
-                    {
-                        <th>@string.Concat(prop.Name.Select(x => Char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' ')</th>
-                    }
+        <tr class="data-heading">
+            @{
+                //  ViewData["Products"]
+                foreach (var prop in typeof(Supplier_MVC.Models.ProductsModel).GetProperties())
+                {
+                    <th>@string.Concat(prop.Name.Select(x => Char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' ')</th>
                 }
-                <td>Actions</td>
-                <td></td>
-            </tr>
+            }
+            <td>Actions</td>
+            <td></td>
+        </tr>
         </thead>
         <tbody>
-            @{
-                var properties = typeof(Supplier_MVC.Models.ProductsModel).GetProperties();
-                if (products is { Count: > 0 })
-                    foreach (var j in products)
-                    {
-                        <tr>
-                            @foreach (var i in properties)
-                            {
-                                <td>@i.GetValue(j, null)</td>
-                            }
-                            <td>
-                                <button onclick="AddName('@j.Name', '@j.ProductId', '@j.Description', '@j.Unit')" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
-                            </td>
-                            <td>
-                                <button onclick="Delete('@j.Name', '@j.ProductId')" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
-                            </td>
-                        </tr>
-                    }
-            }
+        @{
+            var properties = typeof(Supplier_MVC.Models.ProductsModel).GetProperties();
+            if (products is { Count: > 0 })
+                foreach (var j in products)
+                {
+                    <tr>
+                        @foreach (var i in properties)
+                        {
+                            <td>@i.GetValue(j, null)</td>
+                        }
+                        <td>
+                            <button onclick="AddName('@j.Name', '@j.ProductId', '@j.Description', '@j.Unit')" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
+                        </td>
+                        <td>
+                            <button onclick="Delete('@j.Name', '@j.ProductId')" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
+                        </td>
+                    </tr>
+                }
+        }
         </tbody>
     </table>
     <button onclick="AddName(null, -1, null, null)" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal">
@@ -61,6 +62,7 @@
         document.getElementById("productId_2").value = id;
     }
     let loaded = 0;
+    
     function dummyLoaded() {
         if (loaded >= 1)
             location.reload();
