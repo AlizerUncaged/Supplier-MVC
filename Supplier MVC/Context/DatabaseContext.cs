@@ -1,8 +1,10 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Supplier_MVC.Models;
 
 namespace Supplier_MVC.Context
@@ -24,7 +26,8 @@ namespace Supplier_MVC.Context
             {
                 options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName);
             });
-
+            
+            
             base.OnConfiguring(optionsBuilder);
         }
 
@@ -33,6 +36,11 @@ namespace Supplier_MVC.Context
             builder.Entity<SupplierModel>(x =>
             {
                 x.Property(e => e.SupplierId).ValueGeneratedNever();
+            });
+            
+            builder.Entity<ProductsModel>(x =>
+            {
+                x.Property(e => e.Thumbnail).IsRequired(false);
             });
 
             base.OnModelCreating(builder);

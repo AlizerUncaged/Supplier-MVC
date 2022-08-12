@@ -2,8 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Supplier_MVC.Context;
 using Supplier_MVC.Models;
 
@@ -20,7 +22,6 @@ namespace Supplier_MVC.Controllers
             _databaseContext = databaseContext;
             this.signInManager = signInManager;
             _databaseContext.Database.EnsureCreated();
-
         }
 
         [HttpGet("/")]
@@ -42,35 +43,39 @@ namespace Supplier_MVC.Controllers
 
         [Authorize]
         [HttpPost("/add")]
-        public async Task<IActionResult> Index(string name, string description, string unit, string id)
+        public async Task<IActionResult> Add(ProductsModel product)
         {
-            var intId = int.Parse(id);
-
-            if (intId > 0)
+            // Convert image byte to byte array.
+            if (product.Image is { Length: > 0 })
             {
-                // Edit item.
-                var found = _databaseContext.Products.FirstOrDefault(x => x.ProductId == intId);
-                if (found is { })
-                {
-                    found.Name = name;
-                    found.Description = description;
-                    found.Unit = unit;
-                }
+                IFormFile file = product.Image;
+
+                long length = file.Length;
+                if (length < 0)
+                    return BadRequest();
+
+                using var fileStream = file.OpenReadStream();
+                product.Thumbnail = new byte[file.Length];
+                await fileStream.ReadAsync(product.Thumbnail, 0, (int)file.Length);
             }
+
+            var existingProduct = _databaseContext.Products.FirstOrDefault(x => x.ProductId == product.ProductId);
+            if (existingProduct is null)
+                await _databaseContext.Products.AddAsync(product);
             else
             {
-                // Add item.
-                _databaseContext.Products.Add(new ProductsModel()
-                {
-                    ProductId = _databaseContext.Products.Count() + 1,
-                    Name = name,
-                    Description = description,
-                    Unit = unit
-                });
+                product.Thumbnail = existingProduct.Thumbnail;
+                _databaseContext.Entry(existingProduct).CurrentValues.SetValues(product);
             }
 
-            await _databaseContext.SaveChangesAsync();
+            //
+            // if (_databaseContext.Entry(product).State == EntityState.Detached)
+            // {
+            //     await _databaseContext.Products.AddAsync(product);
+            // }
+            // else _databaseContext.Entry(product).State = EntityState.Modified;
 
+            await _databaseContext.SaveChangesAsync();
             return Content("ok");
         }
 
@@ -96,6 +101,5 @@ namespace Supplier_MVC.Controllers
             await signInManager.SignOutAsync();
             return RedirectPermanent("./login");
         }
-
     }
 }

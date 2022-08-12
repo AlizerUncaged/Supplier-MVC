@@ -1,0 +1,20 @@
+﻿@using Supplier_MVC.Context
+
+@inject DatabaseContext _database;
+@{
+
+}
+
+<div class="container">
+    @foreach (var product in _database.Products.ToList())
+    {
+        <div class="card" style="width: 18rem;">
+            <img src="@(product.Thumbnail is null ? "" : "data:image;base64," + Convert.ToBase64String(product.Thumbnail))" class="card-img-top" alt="@product.Name">
+            <div class="card-body">
+                <h5 class="card-title">@product.Name</h5>
+                <p class="card-text">@product.Description</p>
+                <a href="#" class="btn btn-primary">View</a>
+            </div>
+        </div>
+    }
+</div>

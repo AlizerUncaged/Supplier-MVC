@@ -1,5 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Http;
 
 namespace Supplier_MVC.Models
 {
@@ -19,5 +22,10 @@ namespace Supplier_MVC.Models
         public DateTime DateAdded { get; set; }
 
         public DateTime DateModified { get; set; }
+
+        public byte[]? Thumbnail { get; set; }
+
+        [NotMapped]
+        public IFormFile Image { get; set; }
     }
 }

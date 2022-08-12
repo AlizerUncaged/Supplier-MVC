@@ -47,16 +47,21 @@
         }
         </tbody>
     </table>
-    <button onclick="AddName(null, -1, null, null)" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal">
-        <i class="fa fa-plus" aria-hidden="true"></i> Add Product</button>
+    <button onclick="AddName(null, null, null, null)" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal">
+        <i class="fa fa-plus" aria-hidden="true"></i> Add Product
+    </button>
 </div>
 
 <script>
     function AddName(username, id, desc, unit) {
-        document.getElementById("name").value = username;
-        document.getElementById("description").value = desc;
-        document.getElementById("unit").value = unit;
-        document.getElementById("productId").value = id;
+        if (id)
+            document.getElementById("__productId").value = id;
+        if (username)
+            document.getElementById("name").value = username;
+        if (desc)
+            document.getElementById("description").value = desc;
+        if (unit)
+            document.getElementById("unit").value = unit;
     }
     function Delete(username, id) {
         document.getElementById("productId_2").value = id;
@@ -74,23 +79,34 @@
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="label" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form target="dummyframe" action="./add" method="post">
+            @model ProductsModel
+            <form target="dummyframe" asp-action="Add" enctype="multipart/form-data">
                 <div class="modal-header">
                     <h5 class="modal-title" id="label">Add / Edit Item</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    @{
-                        foreach (var j in properties.Where(x => !x.Name.ToLower().Contains("date") && !x.Name.ToLower().Contains("id") && !x.Name.ToLower().Contains("qty")))
-                        {
-                            var lowered = j.Name.ToLower();
-                            <div class="mb-3">
-                                <label class="form-label">@string.Concat(j.Name.Select(x => Char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' ')</label>
-                                <input id="@lowered" type="text" name="@lowered" class="form-control">
-                            </div>
-                        }
-                    }
-                    <input value="-1" id="productId" type="hidden" name="id" class="form-control">
+                    <input class="form-control" id="__productId" asp-for="ProductId" style="display: none" runat="server"/>
+                    <div class="mb-3">
+                        <label class="form-label">Product Name:</label>
+                        <input id="name" class="form-control" asp-for="Name"/>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description:</label>
+                        <input id="description" class="form-control" asp-for="Description"/>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Unit:</label>
+                        <input id="unit" class="form-control" asp-for="Unit"/>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Quantity:</label>
+                        <input class="form-control" asp-for="Qty"/>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Product Name:</label>
+                        <input class="form-control" asp-for="Image"/>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

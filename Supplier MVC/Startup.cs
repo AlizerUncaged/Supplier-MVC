@@ -71,7 +71,6 @@ namespace Supplier_MVC
                 options.SlidingExpiration = true;
             });
 
-
             // services.AddMvc();
         }
 
@@ -104,7 +103,13 @@ namespace Supplier_MVC
 
                 endpoints.MapControllers();
             });
-
+            
+            
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                context.Database.EnsureCreated();
+            }
         }
     }
 }
