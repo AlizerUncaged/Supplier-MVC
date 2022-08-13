@@ -64,7 +64,8 @@ namespace Supplier_MVC.Controllers
                 await _databaseContext.Products.AddAsync(product);
             else
             {
-                product.Thumbnail = existingProduct.Thumbnail;
+                if (existingProduct.Thumbnail is { Length: > 0 })
+                    product.Thumbnail = existingProduct.Thumbnail;
                 _databaseContext.Entry(existingProduct).CurrentValues.SetValues(product);
             }
 

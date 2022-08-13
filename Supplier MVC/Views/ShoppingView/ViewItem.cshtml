@@ -1,0 +1,75 @@
+﻿@{
+    var product = ViewBag.Product as ProductsModel;
+}
+
+<div class="container">
+    <partial name="_AuthLayout" class="mb-4"/>
+    <div class="row mb-4">
+        <div class="col">
+            <img src="@(product.Thumbnail is null ? "" : "data:image;base64," + Convert.ToBase64String(product.Thumbnail))" class="card-img-top" alt="@product.Name">
+        </div>
+        <div class="col">
+            <h2>@product.Name</h2>
+            <h5 class="@(product.Qty > 0 ? "text-success" : "text-danger")">@product.Qty Left In Stock</h5>
+            <p class="mb-4">@product.Description</p>
+            <button onclick="AddName('@product.ProductId')" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal">₱ @String.Format("{0:n}", product.Price) - Buy</button>
+        </div>
+    </div>
+    <p>Other Items</p>
+    <partial name="_ItemsView"/>
+    <script>
+       function AddName(id) {
+            if (id)
+                document.getElementById("prodId").value = id;
+        }
+        function dummyLoaded() {
+            if (loaded >= 1)
+                location.reload();
+            loaded++;
+        }
+    </script>
+    <iframe onLoad="dummyLoaded()" name="dummyframe" id="dummyframe" style="display: none;"></iframe>
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                @model BuyModel
+                <form target="dummyframe" asp-action="Buy" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="label">Add / Edit Item</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <input id="prodId" class="form-control" asp-for="ProductId" style="display: none"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Quantity:</label>
+                            <input class="form-control" asp-for="Qty"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Address:</label>
+                            <input class="form-control" asp-for="Address"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Payment Type:</label>
+                            <input class="form-control" asp-for="PaymentType" value="Cash on Delivery"/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        @if (product.Qty > 0)
+                        {
+
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        }
+                        else
+                        {
+                            <p class="text-danger">Out of stock.</p>
+                        }
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

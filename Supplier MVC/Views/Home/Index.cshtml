@@ -37,7 +37,7 @@
                             <td>@i.GetValue(j, null)</td>
                         }
                         <td>
-                            <button onclick="AddName('@j.Name', '@j.ProductId', '@j.Description', '@j.Unit')" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
+                            <button onclick="AddName('@j.Name.Replace("'", "&quot;")', '@j.ProductId', '@j.Description.Replace("'", "&quot;")', '@j.Price')" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editModal"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
                         </td>
                         <td>
                             <button onclick="Delete('@j.Name', '@j.ProductId')" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
@@ -96,8 +96,8 @@
                         <input id="description" class="form-control" asp-for="Description"/>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Unit:</label>
-                        <input id="unit" class="form-control" asp-for="Unit"/>
+                        <label class="form-label">Price:</label>
+                        <input id="unit" class="form-control" asp-for="Price"/>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Quantity:</label>

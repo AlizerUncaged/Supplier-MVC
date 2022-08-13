@@ -5,15 +5,18 @@
 
 }
 
-<div class="container">
+<div class="container mt-4">
     @foreach (var product in _database.Products.ToList())
     {
-        <div class="card" style="width: 18rem;">
+        <div class="card" style="max-width: 288px; max-height: 372px">
             <img src="@(product.Thumbnail is null ? "" : "data:image;base64," + Convert.ToBase64String(product.Thumbnail))" class="card-img-top" alt="@product.Name">
             <div class="card-body">
                 <h5 class="card-title">@product.Name</h5>
-                <p class="card-text">@product.Description</p>
-                <a href="#" class="btn btn-primary">View</a>
+                <p class="card-text" style="
+    max-height: 72px;
+    overflow: hidden;
+">@product.Description</p>
+                <a href="./shopping/items/@product.ProductId" class="btn btn-primary">View</a>
             </div>
         </div>
     }
